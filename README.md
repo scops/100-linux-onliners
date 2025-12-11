@@ -1,4 +1,4 @@
-# Linux 100 One-Liners
+# Linux 100 One-Liners (spoiler: hay más de cien...😄)
 
 Colección profesional de one-liners para Linux orientados a productividad, resolución rápida de incidencias y administración real de sistemas. Todos los comandos están documentados con objetivo, explicación, casos de uso y riesgos.
 
@@ -18,17 +18,53 @@ https://subvencionada.sinensia.com/ifct114po-linux
 
 ---
 
-## Estructura de la repo
+## 📂 Contenido por categorías
 
-```
-one-liners/
-  disk-usage.md
-  processes.md
-  networking.md
-  logs.md
-  backup.md
-README.md
-```
+
+### 🔹 Gestión de disco
+`one-liners/disk-usage.md`
+
+
+### 🔹 Procesos y rendimiento
+`one-liners/processes.md`
+
+
+### 🔹 Networking (básico)
+`one-liners/networking.md`
+
+
+### 🔹 Networking (avanzado)
+`one-liners/network-advanced.md`
+
+
+### 🔹 Logs y troubleshooting
+`one-liners/logs.md`
+
+
+### 🔹 Backups y sincronización
+`one-liners/backup.md`
+
+
+### 🔹 Búsqueda de archivos y patrones
+`one-liners/file-search.md`
+
+
+### 🔹 Filesystem avanzado
+`one-liners/filesystem-advanced.md`
+
+
+### 🔹 Seguridad y auditoría
+`one-liners/security.md`
+
+
+### 🔹 Productividad, pipes, xargs y magia de shell
+`one-liners/productivity.md`
+
+
+### 🔸 Bonus: alias de sistema
+`one-liners/aliases.md`
+
+
 
 Cada fichero contiene entre 5 y 20 one-liners, agrupados por temática, con explicación detallada y riesgos.
 
@@ -125,3 +161,6 @@ Ventajas:
 - Estandarizas shortcuts entre máquinas.
 
 En la repo añadiremos un fichero dedicado: `one-liners/aliases.md`, con alias listos para producción.
+
+Contáctame en https://www.sinensia.com
+
