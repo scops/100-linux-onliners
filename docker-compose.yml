@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Main Linux One-Liners learning environment
+  oneliners:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: linux-oneliners:latest
+    container_name: linux-oneliners-lab
+
+    # Interactive terminal
+    stdin_open: true
+    tty: true
+
+    # Hostname for better prompt
+    hostname: oneliners-lab
+
+    # Mount local one-liners directory for live editing
+    volumes:
+      - ./one-liners:/oneliners/docs:ro
+      - ./REQUIREMENTS.md:/oneliners/REQUIREMENTS.md:ro
+      - ./revision.md:/oneliners/revision.md:ro
+      - ./README.md:/oneliners/README.md:ro
+      # Persistent test data (optional, comment out to reset on each run)
+      # - oneliners-data:/oneliners/test-data
+
+    # Network configuration
+    networks:
+      - oneliners-net
+
+    # Resource limits (optional)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 2G
+
+    # Environment variables
+    environment:
+      - TERM=xterm-256color
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+
+    # Keep container running
+    command: /bin/bash
+
+  # Optional: A second container for testing networking commands between hosts
+  oneliners-remote:
+    image: linux-oneliners:latest
+    container_name: linux-oneliners-remote
+    hostname: remote-host
+    stdin_open: true
+    tty: true
+    networks:
+      - oneliners-net
+    environment:
+      - TERM=xterm-256color
+    # Start a simple HTTP server for network testing
+    command: >
+      bash -c "
+      echo 'Remote test server' > /tmp/index.html &&
+      cd /tmp &&
+      python3 -m http.server 8080 &
+      tail -f /dev/null
+      "
+    profiles:
+      - networking  # Only start with --profile networking
+
+networks:
+  oneliners-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Optional: Named volume for persistent test data
+# volumes:
+#   oneliners-data:

@@ -205,21 +205,26 @@ Detectar binarios que se ejecutan con UID root.
 ## 10. Buscar dentro de ficheros enormes sin romperse con binarios
 
 ```bash
-grep -RIZ "texto" .
+grep -RI "texto" .
 ```
 
-**Objetivo**  
+**Objetivo**
 Buscar cadenas en estructuras de directorios mixtas evitando fallos por binarios.
 
 **Explicación rápida**
-- `-Z` → separa resultados con null-byte.
-- Ideal para ficheros que podrían contener binarios.
+- `-R` → búsqueda recursiva en directorios.
+- `-I` → ignora archivos binarios automáticamente.
+- Evita errores del tipo "Binary file matches" que no son útiles.
 
 **Casos de uso**
-- Auditoría de configuraciones.
-- Búsqueda masiva en proyectos gigantes.
+- Auditoría de configuraciones en proyectos grandes.
+- Búsqueda de strings en código fuente sin ruido de binarios.
+- Localizar configuraciones distribuidas en múltiples archivos.
 
 **Riesgos / advertencias**
-- Formato con `-Z` es ideal para pipelines, no para lectura manual.
+- Para procesar resultados con espacios en nombres, usar con `find` y `xargs -0`:
+  ```bash
+  find . -type f -print0 | xargs -0 grep -I "texto"
+  ```
 
 ---

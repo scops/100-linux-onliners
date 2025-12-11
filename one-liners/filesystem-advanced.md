@@ -30,7 +30,7 @@ Detectar carpetas que contienen un número masivo de ficheros (síntoma común d
 ---
 
 ## 2. Ver atributos extendidos (xattrs) de todos los ficheros del directorio
-
+**Requisitos**: Instalar: `apt install attr` (Debian/Ubuntu) o `yum install attr` (RHEL/CentOS)
 ```bash
 getfattr -R -d . 2>/dev/null
 ```
@@ -52,7 +52,7 @@ Auditar atributos extendidos (ACLs, marcas de seguridad, flags especiales).
 ---
 
 ## 3. Ver ACLs de forma recursiva
-
+**Requisitos**: Instalar: `apt install acl` (Debian/Ubuntu) o `yum install acl` (RHEL/CentOS)
 ```bash
 getfacl -R . 2>/dev/null
 ```
@@ -156,7 +156,7 @@ Detectar errores de filesystem reportados por el kernel.
 ---
 
 ## 8. Mostrar espacio ocupado por metadata vs datos (Btrfs)
-
+**Requisitos**: Solo funciona en filesystems Btrfs. Requiere `btrfs-progs` instalado.
 ```bash
 sudo btrfs filesystem df /
 ```
@@ -238,7 +238,7 @@ Detectar ficheros con flags especiales.
 ---
 
 ## 12. Comprobar qué FS soportan cuotas y estado de las mismas
-
+**Requisitos**: Las cuotas deben estar habilitadas en el filesystem. Ver documentación de `quotaon`.
 ```bash
 repquota -a
 ```

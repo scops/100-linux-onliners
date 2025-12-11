@@ -148,24 +148,39 @@ Medir rendimiento.
 
 ---
 
-## 8. Sustituir una expresión en múltiples ficheros sin sed -i
+## 8. Sustituir una expresión en múltiples ficheros
+
+> ⚠️ **Importante**: Este comando NO modifica archivos, solo muestra el resultado en stdout.
 
 ```bash
+# Solo muestra los cambios (no modifica archivos):
 grep -Rl "foo" . | xargs sed 's/foo/bar/g'
+
+# Para modificar archivos in-place:
+grep -Rl "foo" . | xargs sed -i 's/foo/bar/g'
+
+# Para crear copias de respaldo (.bak):
+grep -Rl "foo" . | xargs sed -i.bak 's/foo/bar/g'
 ```
 
-**Objetivo**  
-Evitar sed in-place en entornos restringidos.
+**Objetivo**
+Visualizar o aplicar sustituciones de texto en múltiples archivos.
 
 **Explicación rápida**
-- `grep -Rl` encuentra archivos.
-- `xargs` aplica sed.
+- `grep -Rl "foo"` → encuentra archivos que contienen "foo".
+- `xargs sed` → aplica la sustitución a cada archivo.
+- Sin `-i`: solo imprime (útil para verificar antes de modificar).
+- Con `-i`: modifica archivos in-place.
+- Con `-i.bak`: crea respaldo antes de modificar.
 
 **Casos de uso**
-- Refactor de código.
+- Refactor de código: cambiar nombres de variables/funciones.
+- Actualizar configuraciones en múltiples archivos.
+- Verificar cambios antes de aplicarlos (sin `-i`).
 
 **Riesgos / advertencias**
-- No sobrescribe ficheros; redirigir si se desea.
+- SIEMPRE ejecutar primero sin `-i` para verificar los cambios.
+- Con `-i` los cambios son permanentes (usar `.bak` para seguridad).
 
 ---
 
@@ -211,28 +226,41 @@ Crear árboles completos.
 
 ## 11. Borrar todos los ficheros excepto uno
 
+> 🚨 **PELIGRO EXTREMO - IRREVERSIBLE** 🚨
+>
+> Este comando BORRARÁ todos los archivos excepto el especificado.
+> **SIEMPRE** probar primero SIN `-delete`:
+
 ```bash
+# 1. PRIMERO: Ver qué se va a borrar
+find . -type f ! -name "importante.txt"
+
+# 2. SOLO si estás 100% seguro:
 find . -type f ! -name "importante.txt" -delete
 ```
 
-**Objetivo**  
+**Objetivo**
 Limpieza selectiva extrema.
 
 **Explicación rápida**
-- `! -name` → exclusión.
+- `! -name` → exclusión (NOT).
+- `-delete` → borra los archivos encontrados (IRREVERSIBLE).
 
 **Casos de uso**
-- Limpieza rápida.
+- Limpieza rápida de directorios de trabajo.
+- Mantener solo archivos específicos.
 
 **Riesgos / advertencias**
-- **Extremadamente destructivo**.
+- **Extremadamente destructivo y permanente**.
+- No hay papelera de reciclaje, los archivos se borran definitivamente.
+- SIEMPRE ejecutar primero sin `-delete` para verificar la lista.
 
 ---
 
 ## 12. Mostrar tamaño total por extensión de fichero
 
 ```bash
-find . -type f -printf '%f %s\n' | awk -F. '{print $NF, $2}' | awk '{arr[$1]+=$2} END {for (i in arr) print i, arr[i]}' | sort -k2 -nr
+find . -type f -name "*.*" -printf '%s %f\n' | awk -F. '{size=$1; ext=$NF; arr[ext]+=size} END {for (i in arr) print i, arr[i]}' | sort -k2 -nr
 ```
 
 **Objetivo**  

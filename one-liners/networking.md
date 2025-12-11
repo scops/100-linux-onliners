@@ -162,7 +162,7 @@ Mostrar estadísticas completas de las interfaces de red.
 ---
 
 ## 8. Detectar quién está resolviendo DNS y qué tiempos da
-
+**Requisitos**: Instalar bind-utils: `apt install dnsutils` (Debian/Ubuntu) o `yum install bind-utils` (RHEL/CentOS)
 ```bash
 dig +stats example.com | grep Query
 ```
@@ -184,7 +184,7 @@ Obtener tiempos de resolución DNS de forma simple.
 ---
 
 ## 9. Ver tráfico en una interfaz en tiempo real (solo cabeceras)
-
+**Nota:** Requiere privilegios root
 ```bash
 sudo tcpdump -ni eth0 -c20
 ```

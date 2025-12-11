@@ -127,7 +127,7 @@ Detectar accesos privilegiados sin control.
 ---
 
 ## 7. Ver intentos de acceso SSH fallidos
-
+**Nota**: En RHEL/CentOS usar `/var/log/secure` en lugar de `/var/log/auth.log`
 ```bash
 grep "Failed password" /var/log/auth.log | tail
 ```

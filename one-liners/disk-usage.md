@@ -79,7 +79,7 @@ Identificar qué directorios de usuarios en `/home` son los más pesados.
 ---
 
 ## 4. Ver uso de disco de todos los sistemas de ficheros de forma limpia
-
+**Requisitos**: En sistemas minimalistas instalar: `apt install bsdmainutils` (Debian/Ubuntu)
 ```bash
 df -hP | column -t
 ```

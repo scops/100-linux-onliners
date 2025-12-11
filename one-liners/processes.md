@@ -183,7 +183,7 @@ Ver todas las variables de entorno con las que se ejecuta un proceso.
 ---
 
 ## 9. Identificar procesos que más IO están realizando
-
+**Requisitos**: Instalar iotop: `apt install iotop` (Debian/Ubuntu) o `yum install iotop` (RHEL/CentOS)
 ```bash
 sudo iotop -ao
 ```

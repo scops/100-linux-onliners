@@ -4,6 +4,30 @@ One-liners para leer, filtrar y analizar logs en sistemas Linux de forma rápida
 
 ---
 
+## 📁 Rutas de Logs Según Distribución
+
+Las rutas de logs varían entre distribuciones. Usa esta tabla como referencia:
+
+| Tipo de Log | Ubuntu/Debian | RHEL/CentOS/Fedora | Alpine Linux |
+|-------------|---------------|---------------------|--------------|
+| System      | `/var/log/syslog` | `/var/log/messages` | `/var/log/messages` |
+| Auth        | `/var/log/auth.log` | `/var/log/secure` | `/var/log/auth.log` |
+| Kernel      | `/var/log/kern.log` | `/var/log/messages` | `/var/log/messages` |
+| Boot        | `/var/log/boot.log` | `/var/log/boot.log` | N/A |
+
+> 💡 **Tip para portabilidad**: Usa variables para detectar la ruta correcta automáticamente:
+> ```bash
+> SYSLOG=$([ -f /var/log/syslog ] && echo /var/log/syslog || echo /var/log/messages)
+> tail -f $SYSLOG
+> ```
+
+> 💡 **Para logs de servicios específicos**: Muchos servicios crean sus propios logs en `/var/log/`:
+> - Nginx: `/var/log/nginx/access.log`, `/var/log/nginx/error.log`
+> - Apache: `/var/log/apache2/` (Debian) o `/var/log/httpd/` (RHEL)
+> - MySQL: `/var/log/mysql/error.log` o `/var/log/mysqld.log`
+
+---
+
 ## 1. Seguir solo errores y avisos en tiempo real
 
 ```bash
@@ -29,11 +53,21 @@ Monitorizar logs relevantes sin ruido durante un incidente.
 
 ## 2. Leer el journal (systemd) solo con mensajes de nivel error
 
+> ⚠️ **Requisito**: Este comando requiere systemd. No funciona en:
+> - Contenedores Docker estándar
+> - Sistemas con sysvinit/OpenRC
+> - Alpine Linux (usa OpenRC)
+>
+> **Alternativa**: Usar logs tradicionales:
+> ```bash
+> tail -F /var/log/syslog | grep -E "ERROR|WARN|FAIL"
+> ```
+
 ```bash
 journalctl -p err -f
 ```
 
-**Objetivo**  
+**Objetivo**
 Filtrar mensajes de systemd por nivel de severidad en tiempo real.
 
 **Explicación rápida**
@@ -46,6 +80,7 @@ Filtrar mensajes de systemd por nivel de severidad en tiempo real.
 
 **Riesgos / advertencias**
 - Requiere permisos para ver ciertos logs.
+- No disponible en todos los entornos (ver requisito arriba).
 
 ---
 
@@ -93,20 +128,31 @@ Localizar eventos en una fecha exacta.
 
 ## 5. Ver eventos de un servicio gestionado por systemd
 
+> ⚠️ **Requisito**: Este comando requiere systemd. No funciona en:
+> - Contenedores Docker estándar
+> - Sistemas con sysvinit/OpenRC
+>
+> **Alternativa**: Ver logs del servicio directamente:
+> ```bash
+> # Para nginx:
+> tail -f /var/log/nginx/error.log
+> tail -f /var/log/nginx/access.log
+> ```
+
 ```bash
 journalctl -u nginx --since "1 hour ago"
 ```
 
-**Objetivo**  
+**Objetivo**
 Filtrar logs de un servicio específico en un rango temporal.
 
 **Explicación rápida**
 - `-u nginx` → unidad systemd.
-- `--since` → rango temporal.
+- `--since` → rango temporal (también: "today", "yesterday", "2 days ago").
 
 **Casos de uso**
 - Análisis después de un deploy.
-- Ver errores recientes.
+- Ver errores recientes de un servicio específico.
 
 **Riesgos / advertencias**
 - Requiere acceso a logs del servicio.
@@ -134,7 +180,7 @@ Medir rápidamente la frecuencia de un error.
 ---
 
 ## 7. Ver logs en tiempo real pero con coloreado automático
-
+**Requisitos**: Instalar ccze: `apt install ccze` (Debian/Ubuntu) o `yum install ccze` (RHEL/CentOS)
 ```bash
 tail -F /var/log/syslog | ccze -A
 ```
@@ -180,12 +226,19 @@ Detectar IPs que generan más actividad (intentos de acceso, errores, etc.).
 
 ## 9. Ver cuánto ha crecido un log en los últimos minutos
 
+> ⚠️ **En contenedores Docker**: Configurar TERM primero para evitar error:
+> ```bash
+> export TERM=xterm
+> watch -n5 "wc -l /var/log/syslog"
+> ```
+> Sin TERM configurado verás: `Error opening terminal: unknown`
+
 ```bash
 watch -n5 "wc -l /var/log/syslog"
 ```
 
-**Objetivo**  
-Observar la velocidad de crecimiento de un log.
+**Objetivo**
+Observar la velocidad de crecimiento de un log en tiempo real.
 
 **Explicación rápida**
 - `wc -l` → cuenta líneas.
