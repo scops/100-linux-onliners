@@ -91,10 +91,11 @@ show_main_menu() {
     echo -e "  ${BOLD}8)${NC} 📁 Advanced Filesystem"
     echo -e "  ${BOLD}9)${NC} 🌍 Advanced Networking"
     echo -e "  ${BOLD}10)${NC} 🎯 Useful Aliases"
+    echo -e "  ${BOLD}11)${NC} 🔥 TOP 10 One-Liners"
     echo ""
-    echo -e "  ${BOLD}11)${NC} 🚀 Run Complete Demo"
-    echo -e "  ${BOLD}12)${NC} 📚 View Documentation"
-    echo -e "  ${BOLD}13)${NC} 🧪 Open Test Data Directory"
+    echo -e "  ${BOLD}12)${NC} 🚀 Run Complete Demo"
+    echo -e "  ${BOLD}13)${NC} 📚 View Documentation"
+    echo -e "  ${BOLD}14)${NC} 🧪 Open Test Data Directory"
     echo ""
     echo -e "  ${BOLD}0)${NC} 🚪 Exit"
     echo ""
@@ -528,6 +529,78 @@ EOF
     pause
 }
 
+# TOP 10 one-liners menu
+top10_menu() {
+    clear_screen
+    print_header
+    print_section "🔥 TOP 10 Linux One-Liners"
+
+    echo -e "${WHITE}1. Re-execute with sudo${NC}"
+    execute_command \
+        "echo 'Comando: sudo !! -- Requiere shell interactivo, no se puede demostrar en script'" \
+        "Re-execute last command with sudo (interactive shell only)"
+    pause
+
+    echo ""
+    echo -e "${WHITE}2. AWK frequency counter${NC}"
+    execute_command \
+        "echo -e 'apple\nbanana\napple\norange\napple\nbanana' | awk '{ count[\$1]++ } END { for (v in count) print v, count[v] }'" \
+        "Count occurrences of each unique value (like SQL GROUP BY)"
+    pause
+
+    echo ""
+    echo -e "${WHITE}3. Word frequency histogram${NC}"
+    execute_command \
+        "tr -cs 'A-Za-z' '\n' < ${TEST_DATA_DIR}/files/small.txt | tr A-Z a-z | sort | uniq -c | sort -nr | head" \
+        "Transform text into clean quantitative analysis"
+    pause
+
+    echo ""
+    echo -e "${WHITE}4. Process substitution for comparison${NC}"
+    execute_command \
+        "cd ${TEST_DATA_DIR}/files && echo -e 'line1\nline3\nline2' > test_a.txt && echo -e 'line2\nline1\nline4' > test_b.txt && diff <(sort test_a.txt) <(sort test_b.txt) || echo 'Differences found (expected behavior)'" \
+        "Compare sorted files without creating temporary files"
+    pause
+
+    echo ""
+    echo -e "${WHITE}5. Safe file processing with xargs${NC}"
+    execute_command \
+        "find ${TEST_DATA_DIR}/files -type f -print0 | xargs -0 -I{} echo 'Processing: {}' | head -5" \
+        "Process files safely, even with spaces in names"
+    pause
+
+    echo ""
+    echo -e "${WHITE}6. Analyze most used commands${NC}"
+    execute_command \
+        "history | awk '{print \$2}' | sort | uniq -c | sort -nr | head -10 || echo 'History empty in new container'" \
+        "Identify your most frequently used commands for optimization"
+    pause
+
+    echo ""
+    echo -e "${WHITE}7. Find all except specific file${NC}"
+    execute_command \
+        "cd ${TEST_DATA_DIR}/files && mkdir -p test_exclude && touch test_exclude/{file1.txt,file2.log,importante.txt} && echo 'Files that would be deleted:' && find test_exclude -type f ! -name 'importante.txt' && echo '(not deleting, just showing)' && rm -rf test_exclude" \
+        "Delete everything except what you want to keep (DANGEROUS - test first!)"
+    pause
+
+    echo ""
+    echo -e "${WHITE}8. Network diagnostics - TCP statistics${NC}"
+    execute_command \
+        "ss -s" \
+        "Check TCP socket statistics and health metrics"
+    pause
+
+    echo ""
+    echo -e "${YELLOW}Note: Some TOP 10 commands require optional dependencies:${NC}"
+    echo -e "${CYAN}  • kill with fzf: requires 'fzf' package${NC}"
+    echo -e "${CYAN}  • sponge: requires 'moreutils' package${NC}"
+    echo ""
+    echo -e "${WHITE}Install with:${NC}"
+    echo -e "  ${BOLD}apt-get install fzf moreutils${NC}  # Debian/Ubuntu"
+    echo -e "  ${BOLD}yum install fzf moreutils${NC}      # RHEL/CentOS"
+    pause
+}
+
 # Complete demo
 complete_demo() {
     clear_screen
@@ -632,9 +705,10 @@ main() {
             8) filesystem_advanced_menu ;;
             9) networking_advanced_menu ;;
             10) aliases_menu ;;
-            11) complete_demo ;;
-            12) view_docs ;;
-            13) open_test_data ;;
+            11) top10_menu ;;
+            12) complete_demo ;;
+            13) view_docs ;;
+            14) open_test_data ;;
             0)
                 clear_screen
                 echo -e "${GREEN}${BOLD}"

@@ -59,19 +59,37 @@ Select a category to explore:
   1) 📋 Logs Management
   2) ⚡ Productivity & Text Processing
   3) 💾 Disk Usage Analysis
-  ...
-  11) 🚀 Run Complete Demo  ← ¡Empieza aquí!
+  4) 🔐 Security Auditing
+  5) 🔧 Process Management
+  6) 🔍 File Search & Patterns
+  7) 🌐 Networking Basics
+  8) 📁 Advanced Filesystem
+  9) 🌍 Advanced Networking
+  10) 🎯 Useful Aliases
+  11) 🔥 TOP 10 One-Liners  ← ¡NUEVO! Los mejores comandos
+
+  12) 🚀 Run Complete Demo  ← ¡Empieza aquí!
+  13) 📚 View Documentation
+  14) 🧪 Open Test Data Directory
 ```
 
-### Recomendación: Empieza con el Demo Completo
+### Recomendación: Dos formas de empezar
 
+**Opción A - Demo completo (5 min)**
 ```bash
 # Dentro del contenedor
 menu
-# Luego selecciona: 11 (Run Complete Demo)
+# Luego selecciona: 12 (Run Complete Demo)
 ```
 
-Esto te dará un tour guiado de los comandos más útiles.
+**Opción B - TOP 10 comandos más potentes (10 min)**
+```bash
+# Dentro del contenedor
+menu
+# Luego selecciona: 11 (TOP 10 One-Liners)
+```
+
+El **TOP 10** te muestra los comandos más transformadores para profesionales Linux, con explicaciones y ejemplos prácticos. El **Demo** te da un tour rápido de varias categorías.
 
 ## 🎯 Comandos Útiles Dentro del Contenedor
 
@@ -99,16 +117,17 @@ grep -E "ERROR|WARN" /oneliners/test-data/logs/app.log
 
 ### Categorías de One-Liners
 
-1. **logs.md** - Filtrado y análisis de logs
-2. **productivity.md** - Procesamiento de texto y automatización
-3. **disk-usage.md** - Análisis de uso de disco
-4. **security.md** - Auditoría de seguridad
-5. **processes.md** - Gestión de procesos
-6. **file-search.md** - Búsqueda de archivos
-7. **networking.md** - Comandos de red básicos
-8. **filesystem-advanced.md** - Operaciones avanzadas de filesystem
-9. **network-advanced.md** - Networking avanzado
-10. **aliases.md** - Atajos útiles
+1. **🔥 top-10.md** - **LOS 10 MEJORES** comandos para profesionales Linux
+2. **logs.md** - Filtrado y análisis de logs
+3. **productivity.md** - Procesamiento de texto y automatización
+4. **disk-usage.md** - Análisis de uso de disco
+5. **security.md** - Auditoría de seguridad
+6. **processes.md** - Gestión de procesos
+7. **file-search.md** - Búsqueda de archivos
+8. **networking.md** - Comandos de red básicos
+9. **filesystem-advanced.md** - Operaciones avanzadas de filesystem
+10. **network-advanced.md** - Networking avanzado
+11. **aliases.md** - Atajos útiles
 
 ## 🧪 Datos de Prueba
 
@@ -133,9 +152,54 @@ test-data/
     └── tests/
 ```
 
+## 🔥 TOP 10 - Ejemplos Destacados
+
+Estos son algunos de los comandos más potentes del **TOP 10**:
+
+### 1. Contador de frecuencias tipo SQL GROUP BY
+```bash
+# Contar ocurrencias de cada valor
+echo -e 'apple\nbanana\napple\norange\napple\nbanana' | \
+  awk '{ count[$1]++ } END { for (v in count) print v, count[v] }'
+
+# Resultado:
+# orange 1
+# apple 3
+# banana 2
+```
+
+### 2. Histograma de palabras
+```bash
+# Contar palabras más frecuentes en un archivo
+tr -cs 'A-Za-z' '\n' < /oneliners/test-data/files/small.txt | \
+  tr A-Z a-z | sort | uniq -c | sort -nr | head
+```
+
+### 3. Comparación sin archivos temporales
+```bash
+# Comparar dos archivos ordenados sin crear temporales
+diff <(sort archivo1.txt) <(sort archivo2.txt)
+```
+
+### 4. Procesar archivos con nombres raros (espacios, etc.)
+```bash
+# Método seguro que funciona con CUALQUIER nombre
+find . -type f -print0 | xargs -0 comando
+```
+
+### 5. Analizar tus comandos más usados
+```bash
+# Ver los 20 comandos que más ejecutas
+history | awk '{print $2}' | sort | uniq -c | sort -nr | head -20
+```
+
+Ver todos los TOP 10 en el menú interactivo (opción 11) o en `/oneliners/docs/top-10.md`
+
+---
+
 ## 💡 Ejemplos Rápidos para Probar
 
-### 1. Análisis de Logs
+### Análisis de Logs
 
 ```bash
 # Contar errores en logs
@@ -232,19 +296,26 @@ command -v <comando>
 
 ## 🎓 Recursos de Aprendizaje
 
+### Para TODOS los niveles - Comienza aquí
+1. **🔥 TOP 10 One-Liners** (opción 11 del menú)
+   - Los comandos más potentes y transformadores
+   - Perfecto para entender qué hace a un profesional Linux
+   - 10 minutos bien invertidos
+
 ### Para principiantes
-1. Empieza con la categoría "Logs Management" (la más práctica)
-2. Luego prueba "Productivity & Text Processing"
-3. Continúa con "Disk Usage Analysis"
+1. Empieza con "Run Complete Demo" (opción 12) - tour de 5 minutos
+2. Luego "Logs Management" (opción 1) - la más práctica
+3. Continúa con "Productivity & Text Processing" (opción 2)
+4. Prueba "Disk Usage Analysis" (opción 3)
 
 ### Para intermedios
-1. "Process Management"
-2. "Security Auditing"
-3. "Networking Basics"
+1. "Process Management" (opción 5)
+2. "Security Auditing" (opción 4)
+3. "Networking Basics" (opción 7)
 
 ### Para avanzados
-1. "Advanced Filesystem"
-2. "Advanced Networking"
+1. "Advanced Filesystem" (opción 8)
+2. "Advanced Networking" (opción 9)
 3. Crea tus propios one-liners basados en los ejemplos
 
 ---
